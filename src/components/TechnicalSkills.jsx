@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 const TechnicalSkills = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef(null);
 
   const skills = [
     { name: "React", level: 90, color: "skill-react" },
