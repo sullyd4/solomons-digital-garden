@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -6,29 +6,48 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
+interface FormData {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}
+
+interface ContactInfo {
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  value: string;
+}
+
 const Contact = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     subject: "",
     message: "",
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const { toast } = useToast();
 
-  const handleChange = (e) => {
+  const contactInfo: ContactInfo[] = [
+    { icon: Mail, title: "Email", value: "solomon@example.com" },
+    { icon: Phone, title: "Phone", value: "+1 (555) 123-4567" },
+    { icon: MapPin, title: "Location", value: "San Francisco, CA" },
+  ];
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
     try {
+      // Simulate form submission
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       toast({
@@ -80,47 +99,21 @@ const Contact = () => {
             </div>
 
             <div className="space-y-6">
-              <Card className="border-none bg-card/50">
-                <CardContent className="p-6">
-                  <div className="flex items-center space-x-4">
-                    <div className="bg-primary/10 p-3 rounded-lg">
-                      <Mail className="h-6 w-6 text-primary" />
+              {contactInfo.map((info, index) => (
+                <Card key={index} className="border-none bg-card/50">
+                  <CardContent className="p-6">
+                    <div className="flex items-center space-x-4">
+                      <div className="bg-primary/10 p-3 rounded-lg">
+                        <info.icon className="h-6 w-6 text-primary" />
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-foreground">{info.title}</h4>
+                        <p className="text-muted-foreground">{info.value}</p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-medium text-foreground">Email</h4>
-                      <p className="text-muted-foreground">solomon@example.com</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-none bg-card/50">
-                <CardContent className="p-6">
-                  <div className="flex items-center space-x-4">
-                    <div className="bg-primary/10 p-3 rounded-lg">
-                      <Phone className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-foreground">Phone</h4>
-                      <p className="text-muted-foreground">+1 (555) 123-4567</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-none bg-card/50">
-                <CardContent className="p-6">
-                  <div className="flex items-center space-x-4">
-                    <div className="bg-primary/10 p-3 rounded-lg">
-                      <MapPin className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-foreground">Location</h4>
-                      <p className="text-muted-foreground">San Francisco, CA</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           </div>
 

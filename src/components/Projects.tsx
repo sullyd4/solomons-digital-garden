@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -10,11 +10,20 @@ import projectCoaching from "@/assets/project-coaching.jpg";
 import projectEcommerce from "@/assets/project-ecommerce.jpg";
 import projectTaskManager from "@/assets/project-taskmanager.jpg";
 
-const Projects = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
+interface Project {
+  title: string;
+  description: string;
+  stack: string[];
+  image: string;
+  liveUrl: string;
+  githubUrl: string;
+}
 
-  const projects = [
+const Projects = () => {
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+
+  const projects: Project[] = [
     {
       title: "Empower – Coaching Platform",
       description: "A comprehensive coaching platform that connects trainers with clients, featuring progress tracking, workout planning, and nutrition guidance.",
@@ -41,7 +50,7 @@ const Projects = () => {
     }
   ];
 
-  const categories = ["All", "React", "E-commerce", "Full Stack", "Mobile"];
+  const categories: string[] = ["All", "React", "E-commerce", "Full Stack", "Mobile"];
 
   const filteredProjects = projects.filter(project => {
     const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -56,6 +65,14 @@ const Projects = () => {
     
     return matchesSearch && matchesCategory;
   });
+
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleCategoryChange = (category: string): void => {
+    setSelectedCategory(category);
+  };
 
   return (
     <section id="projects" className="py-20 px-6">
@@ -78,7 +95,7 @@ const Projects = () => {
               <Input
                 placeholder="Search projects..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleSearchChange}
                 className="pl-10"
               />
             </div>
@@ -95,7 +112,7 @@ const Projects = () => {
                         ? "bg-primary text-primary-foreground" 
                         : "hover:bg-secondary/80"
                     }`}
-                    onClick={() => setSelectedCategory(category)}
+                    onClick={() => handleCategoryChange(category)}
                   >
                     {category}
                   </Badge>
@@ -137,13 +154,17 @@ const Projects = () => {
                   </p>
                   
                   <div className="flex gap-3 pt-2">
-                    <Button size="sm" className="flex-1">
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      Live Demo
+                    <Button size="sm" className="flex-1" asChild>
+                      <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        Live Demo
+                      </a>
                     </Button>
-                    <Button size="sm" variant="outline" className="flex-1">
-                      <Github className="w-4 h-4 mr-2" />
-                      Code
+                    <Button size="sm" variant="outline" className="flex-1" asChild>
+                      <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                        <Github className="w-4 h-4 mr-2" />
+                        Code
+                      </a>
                     </Button>
                   </div>
                 </CardContent>
