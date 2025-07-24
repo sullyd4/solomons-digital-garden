@@ -52,11 +52,12 @@ const Navigation = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex space-x-8">
-            {navItems.map((item) => (
+            {navItems.map((item, index) => (
               <button
                 key={item.name}
                 onClick={() => scrollToSection(item.href)}
-                className="text-muted-foreground hover:text-foreground transition-colors duration-200 story-link"
+                className={`text-muted-foreground hover:text-foreground transition-all duration-200 nav-link animate-fade-in`}
+                style={{ animationDelay: `${index * 100}ms` }}
               >
                 {item.name}
               </button>
@@ -67,29 +68,36 @@ const Navigation = () => {
           <Button
             variant="ghost"
             size="sm"
-            className="md:hidden"
+            className="md:hidden hover-scale"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
-            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            <div className="transition-transform duration-200">
+              {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </div>
           </Button>
         </div>
 
         {/* Mobile Navigation */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden bg-background/95 backdrop-blur-md border-t border-border">
+        <div className={`md:hidden overflow-hidden transition-all duration-300 ${
+          isMobileMenuOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'
+        }`}>
+          <div className="bg-background/95 backdrop-blur-md border-t border-border">
             <div className="py-4 space-y-3">
-              {navItems.map((item) => (
+              {navItems.map((item, index) => (
                 <button
                   key={item.name}
                   onClick={() => scrollToSection(item.href)}
-                  className="block w-full text-left px-4 py-2 text-muted-foreground hover:text-foreground transition-colors duration-200"
+                  className={`block w-full text-left px-4 py-2 text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-md transition-all duration-200 ${
+                    isMobileMenuOpen ? 'animate-fade-in' : ''
+                  }`}
+                  style={{ animationDelay: `${index * 100}ms` }}
                 >
                   {item.name}
                 </button>
               ))}
             </div>
           </div>
-        )}
+        </div>
       </div>
     </nav>
   );

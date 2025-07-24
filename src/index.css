@@ -154,25 +154,56 @@
     @apply h-full rounded-full transition-all duration-1000 ease-out;
   }
   
-  /* Hover effects */
+  /* Enhanced hover effects */
   .hover-lift {
-    @apply transition-smooth;
+    @apply transition-all duration-300 ease-out;
   }
   
   .hover-lift:hover {
-    @apply -translate-y-1 shadow-medium;
+    @apply -translate-y-2 shadow-medium scale-105;
+  }
+  
+  /* Smooth scale hover */
+  .hover-scale {
+    @apply transition-transform duration-200 hover:scale-105;
+  }
+  
+  /* Floating animation */
+  .float {
+    @apply animate-float;
   }
   
   /* Professional button variants */
   .btn-primary {
-    @apply bg-primary text-primary-foreground hover:bg-primary/90 transition-smooth;
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 hover:scale-105 transition-all duration-200;
   }
   
   .btn-secondary {
-    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-smooth;
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:scale-105 transition-all duration-200;
   }
   
   .btn-outline {
-    @apply border border-border bg-background hover:bg-muted transition-smooth;
+    @apply border border-border bg-background hover:bg-muted hover:scale-105 transition-all duration-200;
+  }
+  
+  /* Fade in animation trigger */
+  .fade-in-trigger {
+    @apply opacity-0 translate-y-8 transition-all duration-700 ease-out;
+  }
+  
+  .fade-in-trigger.visible {
+    @apply opacity-100 translate-y-0;
+  }
+  
+  /* Stagger animations */
+  .stagger-1 { animation-delay: 0.1s; }
+  .stagger-2 { animation-delay: 0.2s; }
+  .stagger-3 { animation-delay: 0.3s; }
+  .stagger-4 { animation-delay: 0.4s; }
+  .stagger-5 { animation-delay: 0.5s; }
+  
+  /* Navigation animations */
+  .nav-link {
+    @apply relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left;
   }
 }

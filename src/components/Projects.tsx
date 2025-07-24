@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ExternalLink, Github, Search, Filter } from "lucide-react";
+import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 
 // Project assets
 import projectCoaching from "@/assets/project-coaching.jpg";
@@ -19,9 +20,10 @@ interface Project {
   githubUrl: string;
 }
 
-const Projects = () => {
+const Projects: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const { ref, isIntersecting } = useIntersectionObserver({ threshold: 0.1 });
 
   const projects: Project[] = [
     {
@@ -75,20 +77,26 @@ const Projects = () => {
   };
 
   return (
-    <section id="projects" className="py-20 px-6">
+    <section ref={ref} id="projects" className="py-20 px-6">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
+        <div className={`text-center mb-16 transition-all duration-700 ${
+          isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+        }`}>
           <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-4">
             Featured Projects
           </h2>
-          <div className="w-20 h-1 bg-gradient-primary rounded-full mx-auto mb-6"></div>
+          <div className={`w-20 h-1 bg-gradient-primary rounded-full mx-auto mb-6 transition-all duration-500 delay-200 ${
+            isIntersecting ? 'scale-x-100' : 'scale-x-0'
+          }`}></div>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             A showcase of purposeful applications that solve real problems
           </p>
         </div>
 
         {/* Search and Filter */}
-        <div className="mb-12 space-y-6">
+        <div className={`mb-12 space-y-6 transition-all duration-700 delay-300 ${
+          isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+        }`}>
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
             <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
@@ -96,7 +104,7 @@ const Projects = () => {
                 placeholder="Search projects..."
                 value={searchTerm}
                 onChange={handleSearchChange}
-                className="pl-10"
+                className="pl-10 hover-scale focus:scale-105 transition-transform"
               />
             </div>
             
@@ -107,7 +115,7 @@ const Projects = () => {
                   <Badge
                     key={category}
                     variant={selectedCategory === category ? "default" : "secondary"}
-                    className={`cursor-pointer transition-colors ${
+                    className={`cursor-pointer transition-all duration-200 hover-scale ${
                       selectedCategory === category 
                         ? "bg-primary text-primary-foreground" 
                         : "hover:bg-secondary/80"
@@ -125,24 +133,32 @@ const Projects = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredProjects.length > 0 ? (
             filteredProjects.map((project, index) => (
-              <Card key={index} className="overflow-hidden hover-scale transition-transform duration-300 border-none bg-card/50">
-                <div className="relative">
+              <Card 
+                key={index} 
+                className={`overflow-hidden hover-lift border-none bg-card/50 backdrop-blur-sm transition-all duration-700 ${
+                  isIntersecting 
+                    ? 'opacity-100 translate-y-0' 
+                    : 'opacity-0 translate-y-8'
+                }`}
+                style={{ transitionDelay: `${500 + index * 200}ms` }}
+              >
+                <div className="relative group">
                   <img 
                     src={project.image} 
                     alt={`${project.title} preview`}
-                    className="w-full h-48 object-cover"
+                    className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
                 
                 <CardContent className="p-6 space-y-4">
                   <div>
-                    <h3 className="text-xl font-semibold text-foreground mb-2">
+                    <h3 className="text-xl font-semibold text-foreground mb-2 hover:text-primary transition-colors">
                       {project.title}
                     </h3>
                     <div className="flex flex-wrap gap-1 mb-3">
                       {project.stack.map((tech, techIndex) => (
-                        <Badge key={techIndex} variant="secondary" className="text-xs">
+                        <Badge key={techIndex} variant="secondary" className="text-xs hover-scale">
                           {tech}
                         </Badge>
                       ))}
@@ -154,13 +170,13 @@ const Projects = () => {
                   </p>
                   
                   <div className="flex gap-3 pt-2">
-                    <Button size="sm" className="flex-1" asChild>
+                    <Button size="sm" className="flex-1 btn-primary" asChild>
                       <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
                         <ExternalLink className="w-4 h-4 mr-2" />
                         Live Demo
                       </a>
                     </Button>
-                    <Button size="sm" variant="outline" className="flex-1" asChild>
+                    <Button size="sm" variant="outline" className="flex-1 btn-outline" asChild>
                       <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
                         <Github className="w-4 h-4 mr-2" />
                         Code
