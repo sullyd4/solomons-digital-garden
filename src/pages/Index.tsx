@@ -8,7 +8,7 @@ import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import { Toaster } from "@/components/ui/toaster";
 
-const Index = () => {
+const Index: React.FC = () => {
   return (
     <div className="min-h-screen">
       <Navigation />
