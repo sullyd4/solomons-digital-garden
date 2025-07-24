@@ -1,10 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 
-const TechnicalSkills = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef(null);
+interface Skill {
+  name: string;
+  level: number;
+  color: string;
+}
 
-  const skills = [
+const TechnicalSkills: React.FC = () => {
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const skills: Skill[] = [
     { name: "React", level: 90, color: "skill-react" },
     { name: "JavaScript", level: 88, color: "skill-javascript" },
     { name: "TypeScript", level: 85, color: "skill-typescript" },

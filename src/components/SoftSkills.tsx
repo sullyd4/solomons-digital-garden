@@ -1,5 +1,10 @@
-const SoftSkills = () => {
-  const skillGroups = [
+interface SkillGroup {
+  title: string;
+  skills: string[];
+}
+
+const SoftSkills: React.FC = () => {
+  const skillGroups: SkillGroup[] = [
     {
       title: "Communication & Empathy",
       skills: [

@@ -1,6 +1,6 @@
 import aboutWorkspace from "@/assets/about-workspace.jpg";
 
-const About = () => {
+const About: React.FC = () => {
   return (
     <section id="about" className="py-20 px-6 bg-gradient-subtle">
       <div className="max-w-7xl mx-auto">

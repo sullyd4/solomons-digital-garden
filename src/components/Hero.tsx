@@ -2,13 +2,14 @@ import { Button } from "@/components/ui/button";
 import solomonPortrait from "@/assets/solomon-portrait.jpg";
 import { Download, ExternalLink } from "lucide-react";
 
-const Hero = () => {
-  const scrollToProjects = () => {
+const Hero: React.FC = () => {
+  const scrollToProjects = (): void => {
     const element = document.querySelector('#projects');
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
   return (
     <section id="hero" className="min-h-screen flex items-center justify-center px-6 py-20 pt-16">
       <div className="max-w-7xl mx-auto w-full">
